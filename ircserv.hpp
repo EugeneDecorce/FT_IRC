@@ -29,6 +29,14 @@
 # define MAX_CLIENTS 100
 # define BUFFER_SIZE 1024
 
+struct ChannelMode {
+	bool invite_only;
+	bool topic_restricted;
+	std::string key;
+	int user_limit;
+	std::set<int> operators; // Set of operator socket file descriptors
+};
+
 class IRCServer {
 	private:
 		int server_socket;
@@ -37,6 +45,7 @@ class IRCServer {
 		std::map<std::string, std::set<int> > channels;
 		std::vector<struct pollfd> fds;
 		std::map<int, std::string> nicknames;
+		std::map<std::string, ChannelMode> channel_modes;
 
 		void set_non_blocking(int socket);
 		void accept_new_client();
